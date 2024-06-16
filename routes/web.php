@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\GalleryController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -30,7 +31,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/gallery', function () {
-    return Inertia::render('CreateGalery');
+    return Inertia::render('CreateGallery');
 })->middleware(['auth', 'verified'])->name('gallery');
 
 Route::get('/about', function () {
@@ -48,6 +49,14 @@ Route::get('/contact', function () {
 Route::get('/photos', function () {
     return Inertia::render('Photos');
 })->name('photos');
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/gallery/create', [GalleryController::class, 'create'])->name('gallery.create');
+    Route::post('/gallery', [GalleryController::class, 'store'])->name('gallery.store');
+});
+
+Route::get('/photos', [GalleryController::class, 'index'])->name('photos');
+Route::get('/gallery/{gallery}', [GalleryController::class, 'show'])->name('gallery.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
