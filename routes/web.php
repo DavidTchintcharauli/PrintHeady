@@ -57,6 +57,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::get('/photos', [GalleryController::class, 'index'])->name('photos');
 Route::get('/gallery/{gallery}', [GalleryController::class, 'show'])->name('gallery.show');
+Route::delete('/gallery/{id}', [GalleryController::class, 'destroy'])->middleware(['auth', 'verified'])->name('gallery.destroy');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

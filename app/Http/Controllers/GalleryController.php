@@ -50,11 +50,25 @@ class GalleryController extends Controller
             }
         }
 
-        return redirect()->route('dashboard')->with('success', 'Gallery created successfully.');
+        return redirect()->route('photos')->with('success', 'Gallery created successfully.');
     }
 
     public function show(Gallery $gallery)
     {
         return Inertia::render('GalleryPhotos', ['gallery' => $gallery->load('photos')]);
+    }
+
+    public function destroy($id)
+    {
+        $gallery = Gallery::findOrFail($id);
+        
+        if ($gallery->user_id !== auth()->id()) {
+            return redirect()->back()->with('error', 'Unauthorized action.');
+        }
+
+        $gallery->photos()->delete();
+        $gallery->delete();
+
+        return redirect()->route('photos')->with('success', 'Gallery deleted successfully.');
     }
 }

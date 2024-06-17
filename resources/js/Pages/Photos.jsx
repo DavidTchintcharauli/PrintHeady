@@ -1,6 +1,14 @@
-import { Link } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
 
-export default function Photos({ galleries }) {
+export default function Photos({ galleries, auth }) {
+    const { delete: destroy } = useForm();
+
+    const handleDelete = (galleryId) => {
+        if (confirm('Are you sure you want to delete this gallery?')) {
+            destroy(route('gallery.destroy', galleryId));
+        }
+    };
+
     return (
         <div className="py-12">
             <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -27,6 +35,14 @@ export default function Photos({ galleries }) {
                                         >
                                             View More
                                         </Link>
+                                        {auth?.user?.id === gallery.user_id && (
+                                            <button
+                                                onClick={() => handleDelete(gallery.id)}
+                                                className="text-red-500 bg-red-300 p-1 rounded-lg hover:bg-green-400 hover:text-red-700 ml-4"
+                                            >
+                                                Delete
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
                             ))}

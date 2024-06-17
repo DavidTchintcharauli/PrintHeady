@@ -20,4 +20,9 @@ class Gallery extends Model
     {
         return $this->photos()->inRandomOrder()->first();
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
